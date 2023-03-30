@@ -1,4 +1,4 @@
-package br.com.alura.adopet.domain.tutor;
+package br.com.alura.adopet.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

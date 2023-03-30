@@ -1,6 +1,10 @@
 package br.com.alura.adopet.controller;
 
-import br.com.alura.adopet.domain.tutor.*;
+import br.com.alura.adopet.dto.DadosAtualizaTutor;
+import br.com.alura.adopet.dto.DadosCadastroTutor;
+import br.com.alura.adopet.dto.DadosDetalhesTutor;
+import br.com.alura.adopet.dto.DadosListagemTutor;
+import br.com.alura.adopet.service.TutorService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -17,51 +21,48 @@ import org.springframework.web.util.UriComponentsBuilder;
 public class TutorController {
 
     @Autowired
-    private TutorRepository tutorRepository;
+    private TutorService service;
 
     @PostMapping
     @Transactional
     public ResponseEntity cadastrar(@RequestBody @Valid DadosCadastroTutor dados, UriComponentsBuilder uriBuilder) {
-        var tutor = new Tutor(dados);
-        tutorRepository.save(tutor);
+        DadosCadastroTutor tutor = service.cadastrar(dados);
+        var uri = uriBuilder.path("/tutores/{id}").buildAndExpand(tutor.id()).toUri();
 
-        var uri = uriBuilder.path("/tutores/{id}").buildAndExpand(tutor.getId()).toUri();
-
-        return ResponseEntity.created(uri).body(new DadosDetalhesTutor(tutor));
+        return ResponseEntity.created(uri).body(tutor);
     }
 
     @PutMapping
     @Transactional
     public ResponseEntity atualizar(@RequestBody @Valid DadosAtualizaTutor dados) {
-        var tutor = tutorRepository.getReferenceById(dados.id());
-        tutor.atualizaPerfil(dados);
-        return ResponseEntity.ok(new DadosDetalhesTutor(tutor));
+        DadosDetalhesTutor tutor = service.atualizar(dados);
+        return ResponseEntity.ok(tutor);
     }
 
     @GetMapping({"/{id}"})
-    public ResponseEntity listar(@PathVariable Long id) {
-        if (!this.tutorRepository.existsById(id)) {
+    public ResponseEntity detalhar(@PathVariable Long id) {
+        DadosDetalhesTutor tutor = service.detalhar(id);
+
+        if (tutor == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Não encontrado.");
         }
 
-        var tutor = tutorRepository.getReferenceById(id);
-        return ResponseEntity.ok(new DadosDetalhesTutor(tutor));
+        return ResponseEntity.ok(tutor);
     }
 
     @GetMapping
-    public ResponseEntity<Page<DadosListagemTutor>> listarTodos(@PageableDefault(sort = {"nome"}) Pageable paginacao) {
-        Page<DadosListagemTutor> tutores = this.tutorRepository.findAll(paginacao).map(DadosListagemTutor::new);
+    public ResponseEntity<Page<DadosListagemTutor>> listarTodos(@PageableDefault Pageable paginacao) {
+        Page<DadosListagemTutor> tutores = service.listarTodos(paginacao);
         return ResponseEntity.ok(tutores);
     }
 
     @DeleteMapping({"/{id}"})
     @Transactional
     public ResponseEntity deletar(@PathVariable Long id) {
-        if (!this.tutorRepository.existsById(id)) {
+        if (!service.deletar(id)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Não encontrado.");
         }
 
-        this.tutorRepository.deleteById(id);
         return ResponseEntity.ok("Tutor deletado com sucesso.");
     }
 }

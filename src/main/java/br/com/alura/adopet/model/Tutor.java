@@ -1,5 +1,7 @@
-package br.com.alura.adopet.domain.tutor;
+package br.com.alura.adopet.model;
 
+import br.com.alura.adopet.dto.DadosAtualizaTutor;
+import br.com.alura.adopet.dto.DadosCadastroTutor;
 import jakarta.persistence.*;
 import lombok.*;
 
