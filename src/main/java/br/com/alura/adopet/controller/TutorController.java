@@ -1,9 +1,9 @@
 package br.com.alura.adopet.controller;
 
-import br.com.alura.adopet.dto.DadosAtualizaTutor;
-import br.com.alura.adopet.dto.DadosCadastroTutor;
-import br.com.alura.adopet.dto.DadosDetalhesTutor;
-import br.com.alura.adopet.dto.DadosListagemTutor;
+import br.com.alura.adopet.dto.tutor.DadosAtualizaTutor;
+import br.com.alura.adopet.dto.tutor.DadosCadastroTutor;
+import br.com.alura.adopet.dto.tutor.DadosDetalhesTutor;
+import br.com.alura.adopet.dto.tutor.DadosListagemTutor;
 import br.com.alura.adopet.service.TutorService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +44,7 @@ public class TutorController {
         DadosDetalhesTutor tutor = service.detalhar(id);
 
         if (tutor == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Não encontrado.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Tutor não encontrado.");
         }
 
         return ResponseEntity.ok(tutor);
@@ -60,7 +60,7 @@ public class TutorController {
     @Transactional
     public ResponseEntity deletar(@PathVariable Long id) {
         if (!service.deletar(id)) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Não encontrado.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Tutor não encontrado.");
         }
 
         return ResponseEntity.ok("Tutor deletado com sucesso.");

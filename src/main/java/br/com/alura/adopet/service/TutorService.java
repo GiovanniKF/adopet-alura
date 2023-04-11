@@ -1,9 +1,9 @@
 package br.com.alura.adopet.service;
 
-import br.com.alura.adopet.dto.DadosAtualizaTutor;
-import br.com.alura.adopet.dto.DadosCadastroTutor;
-import br.com.alura.adopet.dto.DadosDetalhesTutor;
-import br.com.alura.adopet.dto.DadosListagemTutor;
+import br.com.alura.adopet.dto.tutor.DadosAtualizaTutor;
+import br.com.alura.adopet.dto.tutor.DadosCadastroTutor;
+import br.com.alura.adopet.dto.tutor.DadosDetalhesTutor;
+import br.com.alura.adopet.dto.tutor.DadosListagemTutor;
 import br.com.alura.adopet.model.Tutor;
 import br.com.alura.adopet.repository.TutorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
